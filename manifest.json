@@ -1,0 +1,15 @@
+{
+    "name": "Try Galaxy",
+    "short_name": "Try Galaxy",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/?redirect=false",
+    "icons": [
+      {
+        "src": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F000%2F583%2F611%2Foriginal%2Flocation-icon-vector.jpg&f=1&nofb=1&ipt=0f15e71012841808c016c367fde6ad0ddae42d01d5799e5674421d4d715a491a&ipo=images",
+        "sizes": "192x192",
+        "type": "image/png"
+      }
+    ]
+  }
+  
