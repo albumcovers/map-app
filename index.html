@@ -64,7 +64,7 @@
 
             <h1>${title}</h1>
 
-            <p>
+            <b>Description:</b> <p>
                 ${description}
             </p>
 
@@ -89,6 +89,18 @@
                 'title': 'Work-out Session',
                 'description': 'This is a 30 minute work out session. Join us here to get fit!',
                 'worth': 30
+            });
+
+            geocodeAddress("5710 McClellan Ave, Detroit, MI 48213", 'Mom\'s in the Making', 2, {
+                'title': 'Mom\'s in the Making',
+                'description': 'This class is for Pregnant Moms! Get your game on and have fun rolling around in style... come in yoga pants!',
+                'worth': 400
+            });
+
+            geocodeAddress("Nashua Dr, Detroit, MI 48207", "Run this Track", 1, {
+                'title': 'Run this Track',
+                'description': 'Enjoy a quick run around this track. You get points each time you complete the track loop.',
+                'worth': 10
             });
         }
     </script>
