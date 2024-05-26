@@ -12,12 +12,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-
     <script src="https://www.bing.com/api/maps/mapcontrol?key=AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I" async defer></script>
     <script>
         let map;
 
-        function geocodeAddress(address, name) {
+        function geocodeAddress(address, name, objectId, objectInfo) {
             const apiKey = 'AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I';
             const url = 'https://dev.virtualearth.net/REST/v1/Locations/' + encodeURIComponent(address) + '?key=' + apiKey;
 
@@ -27,32 +26,70 @@
                     const coordinates = data.resourceSets[0].resources[0].point.coordinates;
                     const latitude = coordinates[0];
                     const longitude = coordinates[1];
-                    displayMap(latitude, longitude, name);
+                    displayMap(latitude, longitude, name, objectId, objectInfo);
                 })
                 .catch(error => console.log('Error geocoding address:', error));
         }
 
         function initMap() {
             map = new Microsoft.Maps.Map(document.getElementById('map'), {
-
                 credentials: 'AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I',
                 zoom: 15
             });
         }
 
-        function displayMap(latitude, longitude, name) {
+        function displayMap(latitude, longitude, name, objectId, objectInfo) {
             const location = new Microsoft.Maps.Location(latitude, longitude);
             const pin = new Microsoft.Maps.Pushpin(location, {
                 title: name,
                 color: 'red'
             });
+            Microsoft.Maps.Events.addHandler(pin, 'click', function () {
+                displayLocationInfo(objectId, objectInfo['title'], objectInfo['description'], objectInfo['worth']);
+            });
 
             map.entities.push(pin);
-            map.setView({ zoom: 15 });
+            map.setView({ center: location, zoom: 15 });
         }
+
+        function displayLocationInfo(objectId, title, description, worth) {
+            let info_object = document.querySelector('.objectInfo');
+
+            info_object.innerHTML = `
+
+            <div class="x">
+                &times;
+            </div>
+
+
+            <h1>${title}</h1>
+
+            <p>
+                ${description}
+            </p>
+
+            <b>Worth:</b> <span>${worth} points</span>
+            `;
+
+            info_object.style.display = 'block';
+
+            document.querySelector('.x').addEventListener('click', (event) => {
+                const objectInfo = document.querySelector('.objectInfo');
+                objectInfo.style.display = 'none';
+
+                console.log('X Clicked');
+            });
+        };
 
         function loadMapScenario() {
             initMap();
+
+
+            geocodeAddress("460 W Western Ave, Muskegon, MI 49440", "Work-out Session", 1, {
+                'title': 'Work-out Session',
+                'description': 'This is a 30 minute work out session. Join us here to get fit!',
+                'worth': 30
+            });
         }
     </script>
 </head>
@@ -65,6 +102,19 @@
         </div>
     </div>
     <div id="map"></div>
+    <div class='info-container'>
+        <div class="objectInfo">
+            <div class="x">
+                &times;
+            </div>
+            <h1>
+                Loading...
+            </h1>
+            <p>
+                Give us a sec. We are loading the data!
+            </p>
+        </div>
+    </div>
     <style>
         * {
             font-family: "Montserrat", sans-serif;
@@ -91,14 +141,12 @@
         #map {
             width: 100%;
             height: 100%;
-
             z-index: 1;
         }
 
         #map-container {
             height: 100%;
             width: 100%;
-
             display: flex;
             justify-content: center;
             align-items: center;
@@ -107,9 +155,47 @@
         html, body {
             height: 100%;
             width: 100%;
-
             padding: 0;
             margin: 0;  
+        }
+
+        .x { 
+            width: 100%;
+            color: white;
+            font-size: 32px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+        }
+
+        .objectInfo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            height: 100%;
+            z-index: 9999;
+            padding: 10px;
+            width: 350px;
+            display: none;
+        }
+
+        .info-container {
+            padding: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
         }
     </style>
 </body>
