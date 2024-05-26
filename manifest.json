@@ -1,6 +1,6 @@
 {
-    "name": "Try Galaxy",
-    "short_name": "Try Galaxy",
+    "name": "map app",
+    "short_name": "map app",
     "display": "standalone",
     "scope": "/",
     "start_url": "/?redirect=false",
