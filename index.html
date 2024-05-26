@@ -12,6 +12,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
     <script src="https://www.bing.com/api/maps/mapcontrol?key=AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I" async defer></script>
     <script>
         let map;
@@ -72,10 +77,14 @@
             `;
 
             info_object.style.display = 'block';
+            info_object.style.animation = 'fadeInLeft 1s';
 
             document.querySelector('.x').addEventListener('click', (event) => {
                 const objectInfo = document.querySelector('.objectInfo');
-                objectInfo.style.display = 'none';
+                info_object.style.animation = 'fadeOut 1s';
+                setTimeout(() => {
+                    objectInfo.style.display = 'none';
+                }, 1000);
 
                 console.log('X Clicked');
             });
