@@ -1,534 +1,85 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map App</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Map App</title>
 
-    <link crossorigin="use-credentials" rel="manifest" href="/manifest.json"/>
+        <link
+            crossorigin="use-credentials"
+            rel="manifest"
+            href="/manifest.json"
+        />
 
-    <!-- Monseratt Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <!-- Monseratt Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="app.css" />
 
-    <script src="https://www.bing.com/api/maps/mapcontrol?key=AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I" async defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script>
-        let map;
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
 
-        function geocodeAddress(address, name, objectId, objectInfo) {
-            const apiKey = 'AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I';
-            const url = 'https://dev.virtualearth.net/REST/v1/Locations/' + encodeURIComponent(address) + '?key=' + apiKey;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const coordinates = data.resourceSets[0].resources[0].point.coordinates;
-                    const latitude = coordinates[0];
-                    const longitude = coordinates[1];
-                    displayMap(latitude, longitude, name, objectId, objectInfo);
-                })
-                .catch(error => console.log('Error geocoding address:', error));
-        }
-
-        function initMap() {
-            map = new Microsoft.Maps.Map(document.getElementById('map'), {
-                credentials: 'AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I',
-                zoom: 15
-            });
-        }
-
-        function displayMap(latitude, longitude, name, objectId, objectInfo) {
-            const location = new Microsoft.Maps.Location(latitude, longitude);
-
-            let pin;
-
-            if (objectInfo['worth'] > 100) { 
-                pin = new Microsoft.Maps.Pushpin(location, {
-                    title: name,
-                    color: 'red'
-                });
-            } else if (objectInfo['worth'] < 50) {
-                pin = new Microsoft.Maps.Pushpin(location, {
-                    title: name,
-                    color: 'blue'
-                });
-            } else {
-                pin = new Microsoft.Maps.Pushpin(location, {
-                    title: name,
-                    color: 'green'
-                });
-            }
-
-            Microsoft.Maps.Events.addHandler(pin, 'click', function () {
-                displayLocationInfo(objectId, objectInfo['title'], objectInfo['description'], objectInfo['worth']);
-            });
-
-            map.entities.push(pin);
-            map.setView({ center: location, zoom: 15 });
-        }
-
-        function displayLocationInfo(objectId, title, description, worth) {
-            let info_object = document.querySelector('.objectInfo');
-
-            info_object.innerHTML = `
-
-            <div class="x" id='objinfox'>
-                &times;
+        <script
+            src="https://www.bing.com/api/maps/mapcontrol?key=AjJltzuvBIl2AgIq1BCGUhKoQvxvG1kTFg-8bSmoXpYDvVxGLqpM0kGpcoL9Ty0I"
+            async
+            defer
+        ></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+            integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+    </head>
+    <body onload="loadMapScenario()">
+        <div class="loading-container">
+            <div class="loading">
+                <h1>map app™</h1>
             </div>
-
-
-            <h1>${title}</h1>
-
-            <b>Description:</b> <p>
-                ${description}
-            </p>
-
-            <b>Worth:</b> <span>${worth} points</span>
-            `;
-
-            info_object.style.display = 'block';
-            info_object.style.animation = 'fadeInLeft 1s';
-
-            document.querySelector('#objinfox').addEventListener('click', (event) => {
-                let objectInfo = document.querySelector('.objectInfo');
-                info_object.style.animation = 'fadeOutLeft 1s';
-                setTimeout(() => {
-                    objectInfo.style.display = 'none';
-                }, 1000);
-
-                console.log('X Clicked');
-            });
-        };
-
-        function loadMapScenario() {
-            initMap();
-
-            /* Below are where the actual points go */
-
-            geocodeAddress("460 W Western Ave, Muskegon, MI 49440", "Work-out Session", 1, {
-                'title': 'Work-out Session',
-                'description': 'This is a 30 minute work out session. Join us here to get fit!',
-                'worth': 30
-            });
-
-            geocodeAddress("5710 McClellan Ave, Detroit, MI 48213", 'Mom\'s in the Making', 2, {
-                'title': 'Mom\'s in the Making',
-                'description': 'This class is for Pregnant Moms! Get your game on and have fun rolling around in style... come in yoga pants!',
-                'worth': 400
-            });
-
-            geocodeAddress("Nashua Dr, Detroit, MI 48207", "Run this Track", 1, {
-                'title': 'Run this Track',
-                'description': 'Enjoy a quick run around this track. You get points each time you complete the track loop.',
-                'worth': 10
-            });
-
-            geocodeAddress("123 S Washington Sq, Lansing, MI 48933", "Morning Yoga", 1, {
-                'title': 'Morning Yoga',
-                'description': 'Start your day with a refreshing morning yoga session. Perfect for all skill levels!',
-                'worth': 25
-            });
-
-            geocodeAddress("150 W Jefferson Ave, Detroit, MI 48226", "Downtown Bike Ride", 2, {
-                'title': 'Downtown Bike Ride',
-                'description': 'Join us for a scenic bike ride through downtown Detroit. Bring your bike and helmet!',
-                'worth': 50
-            });
-
-            geocodeAddress("1350 W Lake Lansing Rd, East Lansing, MI 48823", "Lakeside Tai Chi", 1, {
-                'title': 'Lakeside Tai Chi',
-                'description': 'Relax and rejuvenate with a Tai Chi session by the lake. Suitable for beginners and pros alike.',
-                'worth': 30
-            });
-
-            geocodeAddress("1501 E River Rd, Flint, MI 48503", "Riverfront Jog", 1, {
-                'title': 'Riverfront Jog',
-                'description': 'Enjoy a refreshing jog along the riverfront. Track your laps and earn points!',
-                'worth': 20
-            });
-
-            geocodeAddress("301 N Washington St, Ypsilanti, MI 48197", "Pilates in the Park", 2, {
-                'title': 'Pilates in the Park',
-                'description': 'Join us for a Pilates session in the park. Bring a mat and enjoy the outdoors!',
-                'worth': 35
-            });
-
-            geocodeAddress("111 N State St, Ann Arbor, MI 48104", "University Fitness Challenge", 1, {
-                'title': 'University Fitness Challenge',
-                'description': 'Take part in the University Fitness Challenge! Compete in various fitness tasks and win rewards.',
-                'worth': 40
-            });
-
-            geocodeAddress("240 W Grand River Ave, Brighton, MI 48116", "Brighton Bootcamp", 2, {
-                'title': 'Brighton Bootcamp',
-                'description': 'Join us for an intense bootcamp session. All fitness levels welcome!',
-                'worth': 45
-            });
-
-            geocodeAddress("200 W Michigan Ave, Kalamazoo, MI 49007", "Kalamazoo Kickboxing", 1, {
-                'title': 'Kalamazoo Kickboxing',
-                'description': 'Learn the basics of kickboxing in this high-energy class. Gloves provided!',
-                'worth': 50
-            });
-
-            geocodeAddress("2250 S Industrial Hwy, Ann Arbor, MI 48104", "Indoor Climbing Session", 2, {
-                'title': 'Indoor Climbing Session',
-                'description': 'Challenge yourself with an indoor climbing session. All gear included.',
-                'worth': 60
-            });
-
-            geocodeAddress("100 N Capitol Ave, Lansing, MI 48933", "Capitol Steps Workout", 1, {
-                'title': 'Capitol Steps Workout',
-                'description': 'Get fit with a workout session on the steps of the Capitol. Cardio and strength training combined.',
-                'worth': 30
-            });
-
-            geocodeAddress("2100 Woodward Ave, Detroit, MI 48201", "Comerica Park Workout", 2, {
-                'title': 'Comerica Park Workout',
-                'description': 'Join us for a workout session at Comerica Park. Enjoy the great outdoors and get fit!',
-                'worth': 40
-            });
-
-            geocodeAddress("925 S Main St, Royal Oak, MI 48067", "Royal Oak Zumba", 1, {
-                'title': 'Royal Oak Zumba',
-                'description': 'Dance your way to fitness with a fun Zumba class. All levels welcome!',
-                'worth': 25
-            });
-
-            geocodeAddress("303 Monroe St, Detroit, MI 48226", "Greektown Walking Tour", 1, {
-                'title': 'Greektown Walking Tour',
-                'description': 'Enjoy a guided walking tour through Greektown while burning some calories.',
-                'worth': 15
-            });
-
-            geocodeAddress("1903 Western Ave, Grand Rapids, MI 49506", "Grand Rapids CrossFit", 2, {
-                'title': 'Grand Rapids CrossFit',
-                'description': 'Push your limits with a high-intensity CrossFit session. Suitable for all fitness levels.',
-                'worth': 50
-            });
-
-            geocodeAddress("2000 Fuller Rd, Ann Arbor, MI 48105", "Fuller Park Tennis", 1, {
-                'title': 'Fuller Park Tennis',
-                'description': 'Enjoy a game of tennis at Fuller Park. Bring your racket and enjoy the game!',
-                'worth': 20
-            });
-
-            geocodeAddress("1 Campus Martius, Detroit, MI 48226", "Campus Martius Ice Skating", 2, {
-                'title': 'Campus Martius Ice Skating',
-                'description': 'Enjoy a fun ice skating session at Campus Martius. Skate rentals available.',
-                'worth': 30
-            });
-
-            geocodeAddress("300 Ottawa Ave NW, Grand Rapids, MI 49503", "Downtown GR Yoga", 1, {
-                'title': 'Downtown GR Yoga',
-                'description': 'Join us for a relaxing yoga session in downtown Grand Rapids. Perfect for all skill levels.',
-                'worth': 25
-            });
-
-            geocodeAddress("200 W Michigan Ave, Jackson, MI 49201", "Jackson Cycling Club", 2, {
-                'title': 'Jackson Cycling Club',
-                'description': 'Join the Jackson Cycling Club for a group ride. All levels of cyclists welcome!',
-                'worth': 35
-            });
-
-            geocodeAddress("2111 Porter St SW, Grand Rapids, MI 49519", "Yoga on the Green", 1, {
-                'title': 'Yoga on the Green',
-                'description': 'Experience a peaceful yoga session on the green. Perfect for relaxation and fitness.',
-                'worth': 30
-            });
-
-            geocodeAddress("2301 Bellevue St, Detroit, MI 48207", "Belle Isle Running Club", 2, {
-                'title': 'Belle Isle Running Club',
-                'description': 'Join the running club at Belle Isle for a scenic run. Suitable for all running levels.',
-                'worth': 20
-            });
-
-            geocodeAddress("1200 S Franklin St, Mt Pleasant, MI 48859", "CMU Fitness Bootcamp", 1, {
-                'title': 'CMU Fitness Bootcamp',
-                'description': 'Get in shape with the CMU Fitness Bootcamp. High-energy workouts for all levels.',
-                'worth': 45
-            });
-
-            geocodeAddress("300 S 4th Ave, Ann Arbor, MI 48104", "Ann Arbor Dance Fitness", 2, {
-                'title': 'Ann Arbor Dance Fitness',
-                'description': 'Dance your way to fitness with this energetic dance fitness class. All levels welcome!',
-                'worth': 30
-            });
-
-            geocodeAddress("500 S State St, Ann Arbor, MI 48109", "U of M Track Run", 1, {
-                'title': 'U of M Track Run',
-                'description': 'Enjoy a run on the University of Michigan track. Track your laps and earn points!',
-                'worth': 15
-            });
-
-            geocodeAddress("100 Monroe St NW, Grand Rapids, MI 49503", "GR Core Strength", 2, {
-                'title': 'GR Core Strength',
-                'description': 'Build your core strength with this focused workout session. All levels welcome!',
-                'worth': 35
-            });
-
-            geocodeAddress("400 Renaissance Center, Detroit, MI 48243", "Renaissance Center Stairs", 1, {
-                'title': 'Renaissance Center Stairs',
-                'description': 'Get a great workout climbing the stairs at the Renaissance Center. Track your progress!',
-                'worth': 25
-            });
-
-            geocodeAddress("200 N Main St, Royal Oak, MI 48067", "Royal Oak Bootcamp", 2, {
-                'title': 'Royal Oak Bootcamp',
-                'description': 'Join us for an intense bootcamp session in Royal Oak. All fitness levels welcome!',
-                'worth': 40
-            });
-
-            geocodeAddress("1983 N University Ct, Ann Arbor, MI 48109", "Ann Arbor Martial Arts", 1, {
-                'title': 'Ann Arbor Martial Arts',
-                'description': 'Learn the basics of martial arts in this introductory class. All levels welcome!',
-                'worth': 50
-            });
-
-            geocodeAddress("2500 Packard St, Ann Arbor, MI 48104", "Packard St Rollerblading", 2, {
-                'title': 'Packard St Rollerblading',
-                'description': 'Enjoy a fun rollerblading session on Packard Street. Bring your blades and safety gear!',
-                'worth': 30
-            });
-
-            geocodeAddress("1 Hart Plaza, Detroit, MI 48226", "Hart Plaza Aerobics", 1, {
-                'title': 'Hart Plaza Aerobics',
-                'description': 'Join us for an energetic aerobics session at Hart Plaza. All fitness levels welcome!',
-                'worth': 20
-            });
-
-            geocodeAddress("2901 Wabash Rd, Lansing, MI 48910", "Lansing Kayak Adventure", 2, {
-                'title': 'Lansing Kayak Adventure',
-                'description': 'Experience a kayaking adventure on the Lansing River. All equipment provided.',
-                'worth': 60
-            });
-        }
-
-        $(document).ready(() => {
-            $('.settingsIcon').on('click', () => {
-                openSettingsMenu();
-            });
-        });
-
-        /////////////////////////////////////////////////////////////////////////////
-
-        let openSettingsMenu = () => {
-            let setMenu = document.querySelector('.settingsMenu');
-
-            setMenu.style.animation = 'fadeIn 1s';
-            setMenu.style.display = 'flex';
-            
-            document.querySelector('#setmenux').addEventListener('click', (event) => {
-                const objectInfo = document.querySelector('.settingsMenu');
-                setMenu.style.animation = 'fadeOut 1s';
-                setTimeout(() => {
-                    objectInfo.style.display = 'none';
-                }, 1000);
-
-                console.log('X Clicked');
-            });
-        };
-    </script>
-</head>
-<body onload="loadMapScenario()">
-
-    <div class='loading-container'>
-        <div class='loading'>
-            <h1>
-                map app™
-            </h1>
         </div>
-    </div>
 
-    <div id="map" class="animate__fadeIn"></div>
+        <div id="map" class="animate__fadeIn"></div>
 
-    <div class="settingsMenu">
-        <div class="x" id='setmenux'>
-            &times;
-        </div>
-        <h1>
-            Settings Menu
-        </h1>
-        <p>
-            <b>
-                You have
-            </b>
-            300 points.
-        </p>
-    </div>
-
-    <div class='info-container'>
-        <div class="objectInfo">
-            <div class="x" id='objinfox'>
-                &times;
-            </div>
-            <h1>
-                Loading...
-            </h1>
+        <div class="settingsMenu">
+            <div class="x" id="setmenux">&times;</div>
+            <h1>Settings Menu</h1>
             <p>
-                Give us a sec. We are loading the data!
+                <b> You have </b>
+                300 points.
             </p>
         </div>
-    </div>
 
-    <div class="user-container">
-        <a href='#'>
-            <div class="settingsIcon">
-                <i class="fa-solid fa-bars"></i>
+        <div class="info-container">
+            <div class="objectInfo">
+                <div class="x" id="objinfox">&times;</div>
+                <h1>Loading...</h1>
+                <p>Give us a sec. We are loading the data!</p>
             </div>
-        </a>
-    </div>
+        </div>
 
-    <style>
-        .user-container {
-            position: absolute;
+        <div class="user-container">
+            <a href="#">
+                <div class="settingsIcon">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </a>
+        </div>
+    </body>
 
-            bottom: 0;
-            right: 0;
-
-            padding: 10px;
-            z-index: 9999;
-
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .userInfo, .settingsIcon {
-            height: 50px;
-            width: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 0, 0, 0.3);
-            z-index: 9999;
-            cursor: pointer;
-        }
-
-        .settingsMenu { 
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 0, 0, 0.3);
-
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-            width: 100%;
-            height: 100%;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 5px;            
-
-            display: none;
-        }
-
-        * {
-            font-family: "Montserrat", sans-serif;
-        }
-
-        .loading-container {
-            padding: 10px;
-            position: fixed;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            background: black;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            left: 0;
-        }
-
-        .loading {
-            font-size: 100%;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        #map-container {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        html, body {
-            height: 100%;
-            width: 100%;
-            padding: 0;
-            margin: 0;  
-        }
-
-        .x { 
-            width: 100%;
-            color: white;
-            font-size: 32px;
-            text-align: center;
-            cursor: pointer;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 0, 0, 0.3);
-        }
-
-        .objectInfo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 0, 0, 0.3);
-            height: 100%;
-            z-index: 9999;
-            padding: 10px;
-            width: 350px;
-            display: none;
-        }
-
-        .info-container {
-            padding: 10px;
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-        }
-
-        a, a:visited {
-            color: black;
-            text-decoration: none;
-        }
-    </style>
-</body>
+    <script src="app.js"></script>
 </html>
