@@ -482,13 +482,28 @@ let openSettingsMenu = () => {
   setMenu.style.animation = "fadeIn 1s";
   setMenu.style.display = "flex";
 
-  document.querySelector("#setmenux").addEventListener("click", (event) => {
-    const objectInfo = document.querySelector(".settingsMenu");
-    setMenu.style.animation = "fadeOut 1s";
-    setTimeout(() => {
-      objectInfo.style.display = "none";
-    }, 1000);
+  console.log("Settings Menu Opened");
 
-    console.log("X Clicked");
-  });
+  document.getElementById("settings-close-container").style.display = "block";
+  document.getElementById("settings-open-container").style.display = "none";
+
+  document
+    .querySelector("#settings-close-container")
+    .addEventListener("click", (event) => {
+      const objectInfo = document.querySelector(".settingsMenu");
+
+      document.getElementById("settings-close-container").style.display =
+        "none";
+      document.getElementById("settings-open-container").style.display =
+        "block";
+
+      document.getElementById("#");
+      setMenu.style.animation = "fadeOut 1s";
+
+      setTimeout(() => {
+        objectInfo.style.display = "none";
+      }, 1000);
+
+      console.log("X Clicked");
+    });
 };

@@ -56,7 +56,6 @@
         <div id="map" class="animate__fadeIn"></div>
 
         <div class="settingsMenu">
-            <div class="x" id="setmenux">&times;</div>
             <h1>Settings Menu</h1>
             <p>
                 <b> You have </b>
@@ -72,10 +71,18 @@
             </div>
         </div>
 
-        <div class="user-container">
+        <div class="user-container" id="settings-open-container">
             <a href="#">
                 <div class="settingsIcon">
-                    <i class="fa-solid fa-bars"></i>
+                    <i class="fa-solid fa-bars" id="settings settings-open"></i>
+                </div>
+            </a>
+        </div>
+
+        <div class="user-container" id="settings-close-container">
+            <a href="#">
+                <div class="settingsIcon">
+                    <i class="fa-solid fa-x" id="settings-close"></i>
                 </div>
             </a>
         </div>
