@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 .user-container {
     position: absolute;
 
@@ -285,4 +287,15 @@ a:visited {
 
 #settings-close-container {
     display: none;
+}
+
+.googleLogin {
+    width: 100%;
+    padding: 10px;
+    border: black solid 1px;
+    border-radius: 5px;
+    background: black;
+    color: white;
+    font-family: "Roboto Mono", monospace;
+    cursor: pointer;
 }
