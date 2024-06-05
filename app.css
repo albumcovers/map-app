@@ -299,3 +299,10 @@ a:visited {
     font-family: "Roboto Mono", monospace;
     cursor: pointer;
 }
+
+.infoAboutUser a {
+    text-decoration-style: dashed;
+    text-decoration-offset: 5px;
+    color: #FF8CC6;
+    background: black;
+}

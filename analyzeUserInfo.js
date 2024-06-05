@@ -18,5 +18,13 @@ $(document).ready(() => {
       <p>
           Welcome, ${user_name}!
       </p>`;
+
+    if (
+      info["email"] == "brycenweeks10@gmail.com" ||
+      info["email"] == "brendanjp04@gmail.com"
+    ) {
+      document.querySelector(".infoAboutUser").innerHTML += `
+      You are an admin. View the <a href='/admin.html'>admin page.</a>`;
+    }
   }
 });
